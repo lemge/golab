@@ -1,0 +1,20 @@
+syntax="proto3";
+// go_package是有两部分组成，这两部分是由";"隔开的。
+// 前边部分表示生成pb文件的路径，后边部分表示pb文件的包名。
+option go_package="./;product";
+package product;
+
+service ProductInfo{
+    rpc addProduct(Product) returns (ProductId);
+    rpc getProduct(Product) returns (Product);
+}
+
+message Product{
+    string id=1;
+    string name=2;
+    string description=3;
+}
+
+message ProductId{
+    string value=1;
+}
