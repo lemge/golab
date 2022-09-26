@@ -6,7 +6,7 @@ package product;
 
 service ProductInfo{
     rpc addProduct(Product) returns (ProductId);
-    rpc getProduct(Product) returns (Product);
+    rpc getProduct(ProductId) returns (Product);
 }
 
 message Product{

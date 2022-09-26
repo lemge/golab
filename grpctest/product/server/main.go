@@ -16,14 +16,13 @@ const (
 	port = ":50051"
 )
 
-type server struct {
+type productInfoServer struct {
+	product.UnimplementedProductInfoServer
 	productMap map[string]*product.Product
 }
 
-var ProductServer = server{}
-
 //添加商品
-func (s *server) AddProduct(ctx context.Context, req *product.Product) (resp *product.ProductId, err error) {
+func (s *productInfoServer) AddProduct(ctx context.Context, req *product.Product) (resp *product.ProductId, err error) {
 	resp = &product.ProductId{}
 	out, err := uuid.NewV4()
 	if err != nil {
@@ -41,12 +40,17 @@ func (s *server) AddProduct(ctx context.Context, req *product.Product) (resp *pr
 }
 
 //获取商品
-func (s *server) GetProduct(ctx context.Context, req *product.ProductId) (resp *product.Product, err error) {
+func (s *productInfoServer) GetProduct(ctx context.Context, req *product.ProductId) (resp *product.Product, err error) {
 	if s.productMap == nil {
 		s.productMap = make(map[string]*product.Product)
 	}
 	resp = s.productMap[req.Value]
 	return
+}
+
+func newServer() *productInfoServer {
+	s := &productInfoServer{}
+	return s
 }
 
 func main() {
@@ -57,7 +61,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	product.RegisterProductInfoServer(s, ProductServer)
+	product.RegisterProductInfoServer(s, &productInfoServer{})
 	log.Println("start gRPC listen on port " + port)
 	if err := s.Serve(listener); err != nil {
 		log.Println("failed to serve...", err)
