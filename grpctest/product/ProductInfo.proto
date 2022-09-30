@@ -3,7 +3,7 @@ syntax="proto3";
 // 前边部分表示生成pb文件的路径，后边部分表示pb文件的包名。
 option go_package="./;product";
 package product;
-
+//配置rpc服务的种类
 service ProductInfo{
     rpc addProduct(Product) returns (ProductId);
     rpc getProduct(ProductId) returns (Product);
